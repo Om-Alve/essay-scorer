@@ -6,7 +6,7 @@ from pydantic import BaseModel, Field
 
 
 class Grade(BaseModel):
-    grade: Literal["A", "B", "C"] = Field(description="Grade of the essay")
+    grade: int = Field(description="Grade of the essay between 0 - 10")
     feedback: list[str] = Field(description="Feedback to improve the essay")
 
 
@@ -27,15 +27,15 @@ Your task is to evaluate a student's Marathi essay based on:
 2. The topic-specific framework provided (it describes what an ideal essay on this topic should include).
 
 Assign a **grade**:
-- **A** → Excellent essay: insightful, well-structured, fluent Marathi, and aligns well with the framework.
-- **B** → Average essay: understandable and relevant but may have some grammatical, structural, or alignment issues.
-- **C** → Below average: unclear, off-topic, or frequent grammatical mistakes.
+- **8-10 marks** → Excellent essay: insightful, well-structured, fluent Marathi, and aligns well with the framework.
+- **5-7 marks** → Average essay: understandable and relevant but may have some grammatical, structural, or alignment issues.
+- **0-5 marks** → Below average: unclear, off-topic, or frequent grammatical mistakes.
 
-Also provide **specific, actionable feedback points** in English.
+Also provide **specific, actionable feedback points** in English. Remember the student doesn't know anything about the framework so instead of citing framework points, mention them explicitly.
 
 Your response must be valid JSON strictly following this schema:
 {
-  "grade": "A" | "B" | "C",
+  "grade": <marks-between-0-to-10>,
   "feedback": ["point 1", "point 2", ...]
 }
 """
@@ -63,10 +63,10 @@ def grade_essay(topic: str, essay: str, framework: str) -> Grade:
 
         grade = resp.choices[0].message.parsed if resp.choices[0].message else None
         if not grade:
-            grade = Grade(grade="C", feedback=["Could not parse grading response."])
+            grade = Grade(grade=4, feedback=["Could not parse grading response."])
     except Exception as e:
         print(f"Couldn't grade essay '{topic}' due to error: {e}")
-        grade = Grade(grade="C", feedback=["Error occurred during grading."])
+        grade = Grade(grade=4, feedback=["Error occurred during grading."])
     return grade
 
 

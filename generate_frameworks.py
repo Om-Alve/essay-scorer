@@ -41,7 +41,7 @@ def generate_framework(topic: str) -> str:
         if not framework:
             framework = "Couldn't generate a framework."
     except Exception as e:
-        framework = f"Couldn't generate a framework."
+        framework = "Couldn't generate a framework."
         print(f"Couldn't generate a framework due to error: {e}")
     return framework
 

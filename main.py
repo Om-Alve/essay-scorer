@@ -3,7 +3,6 @@ from pydantic import BaseModel
 from google import genai
 from google.genai import types
 
-import httpx
 from generate_frameworks import generate_framework
 import scorer
 
